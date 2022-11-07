@@ -12,6 +12,11 @@ const tweets = [];
 app.post("/sign-up", (req, res) => {
 	const { username, avatar } = req.body;
 
+	if (!username || !avatar) {
+		res.status(400).send("Todos os campos são obrigatórios!");
+		return;
+	}
+
 	users.push({ username, avatar });
 
 	res.send("OK");
@@ -19,19 +24,28 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
 	const { username, tweet } = req.body;
-	const userAvatar = users.find((user) => user.username === username).avatar;
 
-	tweets.push({
-		username,
-		avatar: userAvatar,
-		tweet,
-	});
+	if (!username || !tweet) {
+		res.status(400).send("Todos os campos são obrigatórios!");
+		return;
+	}
+
+	tweets.push({ username, tweet });
 
 	res.send("OK");
 });
 
 app.get("/tweets", (req, res) => {
-	res.send(tweets.slice(-10));
+	let tweetsWithAvatar = tweets.slice(-10);
+
+	if (users.length !== 0) {
+		tweetsWithAvatar = tweetsWithAvatar.map((tweet) => {
+			const user = users.find((user) => user.username === tweet.username);
+			return { ...tweet, avatar: user.avatar };
+		});
+	}
+
+	res.send(tweetsWithAvatar);
 });
 
 app.listen(5000, () => console.log("App running in port 5000"));
