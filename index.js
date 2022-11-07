@@ -59,16 +59,14 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:user", (req, res) => {
 	const { user } = req.params;
 
-	let tweetsFromUser = tweets.filter(tweet => tweet.username = user)
+	const tweetsFromUser = tweets.filter((tweet) => tweet.username === user)
 
-	if (users.length !== 0) {
-		tweetsFromUser = tweetsFromUser.map((tweet) => {
+	const tweetsWithAvatar = tweetsFromUser.map((tweet) => {
 			const userAvatar = users.find((user) => user.username === tweet.username);
 			return { ...tweet, avatar: userAvatar.avatar };
-		});
-	}
+	});
 
-	res.send(tweetsFromUser)
+	res.send(tweetsWithAvatar)
 });
 
 app.listen(5000, () => console.log("App running in port 5000"));
