@@ -19,7 +19,7 @@ app.post("/sign-up", (req, res) => {
 
 	users.push({ username, avatar });
 
-	res.send("OK");
+	res.status(201).send("OK");
 });
 
 app.post("/tweets", (req, res) => {
@@ -39,12 +39,12 @@ app.post("/tweets", (req, res) => {
 app.get("/tweets", (req, res) => {
 	const { page } = req.query;
 
-	if(page <=0) {
+	if (page <= 0) {
 		res.status(400).send("Informe uma página válida!");
 		return;
 	}
 
-	let tweetsWithAvatar = tweets.slice(((page - 1) * 10), page * 10);
+	let tweetsWithAvatar = tweets.slice((page - 1) * 10, page * 10);
 
 	if (users.length !== 0) {
 		tweetsWithAvatar = tweetsWithAvatar.map((tweet) => {
@@ -59,14 +59,14 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:user", (req, res) => {
 	const { user } = req.params;
 
-	const tweetsFromUser = tweets.filter((tweet) => tweet.username === user)
+	const tweetsFromUser = tweets.filter((tweet) => tweet.username === user);
 
 	const tweetsWithAvatar = tweetsFromUser.map((tweet) => {
-			const userAvatar = users.find((user) => user.username === tweet.username);
-			return { ...tweet, avatar: userAvatar.avatar };
+		const userAvatar = users.find((user) => user.username === tweet.username);
+		return { ...tweet, avatar: userAvatar.avatar };
 	});
 
-	res.send(tweetsWithAvatar)
+	res.send(tweetsWithAvatar);
 });
 
 app.listen(5000, () => console.log("App running in port 5000"));
