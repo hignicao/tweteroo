@@ -19,7 +19,7 @@ app.post("/sign-up", (req, res) => {
 
 	users.push({ username, avatar });
 
-	res.send("OK");
+	res.status(201).send("OK");
 });
 
 app.post("/tweets", (req, res) => {
@@ -32,7 +32,7 @@ app.post("/tweets", (req, res) => {
 
 	tweets.push({ username, tweet });
 
-	res.send("OK");
+	res.status(201).send("OK");
 });
 
 app.get("/tweets", (req, res) => {
